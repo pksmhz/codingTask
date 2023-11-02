@@ -6,7 +6,6 @@ import com.coding.task.database.Purchase;
 import com.coding.task.database.PurchaseRepository;
 import com.coding.task.logic.ResultPoints;
 import com.coding.task.logic.RewardPointsCalculator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,15 +16,17 @@ import java.util.stream.Collectors;
 @Service
 public class RewardPointsService {
 
-    @Autowired
-    PurchaseRepository purchaseRepository;
+    final PurchaseRepository purchaseRepository;
 
-    @Autowired
-    CustomerRepository customerRepository;
+    final CustomerRepository customerRepository;
 
-    @Autowired
-    RewardPointsCalculator rewardPointsCalculator;
+    final RewardPointsCalculator rewardPointsCalculator;
 
+    public RewardPointsService(PurchaseRepository purchaseRepository, CustomerRepository customerRepository, RewardPointsCalculator rewardPointsCalculator) {
+        this.purchaseRepository = purchaseRepository;
+        this.customerRepository = customerRepository;
+        this.rewardPointsCalculator = rewardPointsCalculator;
+    }
 
     public Map<String, ResultPoints>  getRewardPoints() {
         List<Purchase> purchases = purchaseRepository.findByDateGreaterThan(LocalDate.now().minusMonths(3));
@@ -41,7 +42,7 @@ public class RewardPointsService {
         if (nameById == null) {
             throw new CustomerIdNotFoundException();
         }
-        List<Purchase> purchases = purchaseRepository.findByDateGreaterThanAndCustomerId(LocalDate.now().minusMonths(3), customerId);
+        List<Purchase> purchases = purchaseRepository.findByDateGreaterThanAndCustomerId(LocalDate.now().minusMonths(20), customerId);
 
         return rewardPointsCalculator.calculateRewardsPointsForSingleCustomer(purchases);
     }

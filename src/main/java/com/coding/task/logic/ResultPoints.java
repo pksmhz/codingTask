@@ -5,12 +5,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
-//@AllArgsConstructor
+@Getter
 @NoArgsConstructor
 public class ResultPoints {
-    @Getter
     private Long total;
-    @Getter
     private Map<Integer, Long> rewardPointsByMonth;
 
     public ResultPoints(Map<Integer, Long> rewardPointsByMonth) {
